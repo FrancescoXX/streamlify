@@ -5,7 +5,7 @@ export interface Idea {
   votes: number;
 }
 
-let ideas: Idea[] = [];
+const ideas: Idea[] = [];
 
 export const getIdeas = (): Idea[] => ideas;
 export const addIdea = (text: string): Idea[] => {
