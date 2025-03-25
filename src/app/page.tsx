@@ -45,6 +45,16 @@ export default function Home() {
     setIdeas(updatedIdeas);
   };
 
+  // Add this to flush all ideas
+  const handleFlush = async () => {
+    const response = await fetch("/api/flush", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const updatedIdeas: Idea[] = await response.json();
+    setIdeas(updatedIdeas);
+  };
+
   return (
     <main className="main">
       <h1 className="title">Streamlify</h1>
@@ -63,6 +73,13 @@ export default function Home() {
           Submit
         </button>
       </form>
+
+      {/* Flush Button */}
+      <div style={{ textAlign: "center", margin: "20px 0" }}>
+        <button onClick={handleFlush} className="button">
+          Flush DB
+        </button>
+      </div>
 
       {/* Ideas List */}
       <ul className="list">

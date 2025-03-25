@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getIdeas, addIdea } from "../../../lib/ideas"; // Adjusted path
+import { getIdeas, addIdea } from "../../../lib/ideas";
 
 export async function GET() {
   return NextResponse.json(getIdeas());
