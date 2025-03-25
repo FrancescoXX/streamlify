@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { voteIdea } from "../../../lib/ideas"; // Adjusted path
+import { voteIdea } from "../../../lib/ideas";
 
 export async function POST(request: NextRequest) {
   const { id }: { id: number } = await request.json();
