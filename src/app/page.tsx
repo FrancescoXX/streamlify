@@ -184,20 +184,20 @@ export default function Home() {
           <p style={{ fontSize: "1rem", color: "#b0b0b0", marginBottom: "20px" }}>
             Please sign in to access the app.
           </p>
-          <SignInButton
-            mode="modal"
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#3498db",
-              color: "#ffffff",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontWeight: "bold",
-              fontSize: "1rem",
-            }}
-          >
-            Sign In
+          <SignInButton mode="modal">
+            <button
+              style={{
+                padding: "12px 20px",
+                backgroundColor: "#3498db",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              Sign In
+            </button>
           </SignInButton>
         </div>
       </SignedOut>
