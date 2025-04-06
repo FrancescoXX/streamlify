@@ -1,7 +1,8 @@
 "use client";
 
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs"; // Import useUser hook
 import { useState, useEffect } from "react";
+import GitHubStars from "../components/GitHubStars"; // Import the GitHubStars component
 
 interface Idea {
   id: number;
@@ -12,6 +13,9 @@ interface Idea {
 export default function Home() {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [newIdea, setNewIdea] = useState<string>("");
+  const { user } = useUser(); // Get the current user
+
+  const isAdmin = user?.publicMetadata?.role === "admin"; // Check if the user has the "admin" role
 
   useEffect(() => {
     fetch("/api/ideas")
@@ -54,53 +58,147 @@ export default function Home() {
 
   return (
     <main className="main">
-      <SignedIn>
-        <div style={{ textAlign: "right", marginBottom: "20px" }}>
-          <UserButton />
-        </div>
-        <h1 className="title">Streamlify</h1>
-        <p className="motto">Extreamly good stream ideas</p>
+      {/* Top bar with GitHub stars and UserButton */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+        <GitHubStars /> {/* GitHubStars component */}
+        <SignedIn>
+          <UserButton /> {/* UserButton for logged-in users */}
+        </SignedIn>
+      </div>
 
-        <form onSubmit={handleSubmit} className="form">
+      <SignedIn>
+        <div style={{ textAlign: "center", marginBottom: "40px" }}>
+          <h1 className="title">Streamlify</h1>
+          <p className="motto">Extreamly good stream ideas</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="form" style={{ marginBottom: "30px" }}>
           <input
             type="text"
             value={newIdea}
             onChange={(e) => setNewIdea(e.target.value)}
             placeholder="Drop your extreamly good idea..."
             className="input"
+            style={{
+              padding: "12px",
+              fontSize: "16px",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              width: "70%",
+              marginRight: "10px",
+            }}
           />
-          <button type="submit" className="button">
+          <button
+            type="submit"
+            className="button"
+            style={{
+              padding: "12px 20px",
+              backgroundColor: "#3498db",
+              color: "#fff",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: "bold",
+            }}
+          >
             Submit
           </button>
         </form>
 
-        <div style={{ textAlign: "center", margin: "20px 0" }}>
-          <button onClick={handleFlush} className="button">
-            Flush DB
-          </button>
-        </div>
-
-        <ul className="list">
+        <ul className="list" style={{ listStyle: "none", padding: 0 }}>
           {ideas
             .sort((a, b) => b.votes - a.votes)
             .map((idea) => (
-              <li key={idea.id} className="item">
-                <span>
+              <li
+                key={idea.id}
+                className="item"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "12px 16px",
+                  backgroundColor: "#fff",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                  marginBottom: "10px",
+                }}
+              >
+                <span style={{ fontSize: "16px", fontWeight: "500" }}>
                   {idea.text} - Votes: {idea.votes}
                 </span>
-                <button onClick={() => handleVote(idea.id)} className="voteButton">
+                <button
+                  onClick={() => handleVote(idea.id)}
+                  className="voteButton"
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#2ecc71",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                  }}
+                >
                   Vote
                 </button>
               </li>
             ))}
         </ul>
+
+        {isAdmin && ( // Only show the button if the user is an admin
+          <div style={{ textAlign: "center", marginTop: "20px" }}>
+            <button
+              onClick={handleFlush}
+              className="button"
+              style={{
+                padding: "12px 20px",
+                backgroundColor: "#e74c3c",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              Flush DB
+            </button>
+          </div>
+        )}
       </SignedIn>
 
       <SignedOut>
-        <div style={{ textAlign: "center", marginTop: "50px" }}>
-          <h1>Welcome to Streamlify</h1>
-          <p>Please sign in to access the app.</p>
-          <SignInButton />
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "50px",
+            padding: "20px",
+            backgroundColor: "#1e1e1e", // Dark background for contrast
+            borderRadius: "8px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+            maxWidth: "400px",
+            margin: "50px auto", // Center the container
+          }}
+        >
+          <h1 style={{ fontSize: "2rem", marginBottom: "10px", color: "#ffffff" }}>
+            Welcome to Streamlify
+          </h1>
+          <p style={{ fontSize: "1rem", color: "#b0b0b0", marginBottom: "20px" }}>
+            Please sign in to access the app.
+          </p>
+          <SignInButton mode="modal">
+            <button
+              style={{
+                padding: "12px 20px",
+                backgroundColor: "#3498db",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              Sign In
+            </button>
+          </SignInButton>
         </div>
       </SignedOut>
     </main>
