@@ -1,8 +1,9 @@
 "use client";
 
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs"; // Import useUser hook
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { useState, useEffect } from "react";
-import GitHubStars from "../components/GitHubStars"; // Import the GitHubStars component
+import Head from "next/head"; // ✅ Import Head
+import GitHubStars from "../components/GitHubStars";
 
 interface Idea {
   id: number;
@@ -13,9 +14,8 @@ interface Idea {
 export default function Home() {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [newIdea, setNewIdea] = useState<string>("");
-  const { user } = useUser(); // Get the current user
-
-  const isAdmin = user?.publicMetadata?.role === "admin"; // Check if the user has the "admin" role
+  const { user } = useUser();
+  const isAdmin = user?.publicMetadata?.role === "admin";
 
   useEffect(() => {
     fetch("/api/ideas")
@@ -58,11 +58,20 @@ export default function Home() {
 
   return (
     <main className="main">
+      {/* ✅ Include litlyx script */}
+      <Head>
+        <script
+          defer
+          data-project="67ff789fb9698244377ebd20"
+          src="https://cdn.jsdelivr.net/gh/litlyx/litlyx-js/browser/litlyx.js"
+        ></script>
+      </Head>
+
       {/* Top bar with GitHub stars and UserButton */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-        <GitHubStars /> {/* GitHubStars component */}
+        <GitHubStars />
         <SignedIn>
-          <UserButton /> {/* UserButton for logged-in users */}
+          <UserButton />
         </SignedIn>
       </div>
 
@@ -144,7 +153,7 @@ export default function Home() {
             ))}
         </ul>
 
-        {isAdmin && ( // Only show the button if the user is an admin
+        {isAdmin && (
           <div style={{ textAlign: "center", marginTop: "20px" }}>
             <button
               onClick={handleFlush}
@@ -171,11 +180,11 @@ export default function Home() {
             textAlign: "center",
             marginTop: "50px",
             padding: "20px",
-            backgroundColor: "#1e1e1e", // Dark background for contrast
+            backgroundColor: "#1e1e1e",
             borderRadius: "8px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
             maxWidth: "400px",
-            margin: "50px auto", // Center the container
+            margin: "50px auto",
           }}
         >
           <h1 style={{ fontSize: "2rem", marginBottom: "10px", color: "#ffffff" }}>
