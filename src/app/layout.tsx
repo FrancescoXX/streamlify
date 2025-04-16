@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Lit } from "litlyx-js"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,14 +24,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  Lit.init("your_project_id");
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className="antialiased overflow-x-hidden"
       >
-        <ClerkProvider>
-          {children}
-        </ClerkProvider>
+        {children}
       </body>
     </html>
   );
