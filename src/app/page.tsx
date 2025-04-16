@@ -37,6 +37,7 @@ export default function Home() {
     setNewIdea("");
   };
 
+  //
   const handleVote = async (id: number) => {
     const response = await fetch("/api/vote", {
       method: "POST",
