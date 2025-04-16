@@ -5,7 +5,7 @@ import { Lit } from "litlyx-js";
 
 export function LitInitializer() {
   useEffect(() => {
-    Lit.init("your_project_id"); // Replace with your actual project ID
+    Lit.init("67ff8125b9698244377ec522"); // Replace with your actual project ID
   }, []);
 
   return null;
